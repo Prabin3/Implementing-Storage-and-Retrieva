@@ -119,7 +119,7 @@ function reset_password($username) {
 // set password for username to a random value
 // return the new password or false on failure
   // get a random dictionary word b/w 6 and 13 chars in length
-  $new_password = get_random_word(6, 13);
+  $new_password = "root12";
 
   if($new_password == false) {
     // give a default password
@@ -128,8 +128,8 @@ function reset_password($username) {
 
   // add a number  between 0 and 999 to it
   // to make it a slightly better password
-  $rand_number = rand(0, 999);
-  $new_password .= $rand_number;
+  // $rand_number = rand(0, 999);
+  // $new_password .= $rand_number;
 
   // set user's password to this in database or return false
   $conn = db_connect();
@@ -143,30 +143,30 @@ function reset_password($username) {
   }
 }
 
-// function notify_password($username, $password) {
-// // notify the user that their password has been changed
+function notify_password($username, $password) {
+// notify the user that their password has been changed
 
-//     $conn = db_connect();
-//     $result = $conn->query("select email from user
-//                             where username='".$username."'");
-//     if (!$result) {
-//       throw new Exception('Could not find email address.');
-//     } else if ($result->num_rows == 0) {
-//       throw new Exception('Could not find email address.');
-//       // username not in db
-//     } else {
-//       $row = $result->fetch_object();
-//       $email = $row->email;
-//       $from = "From: support@phpbookmark \r\n";
-//       $mesg = "Your PHPBookmark password has been changed to ".$password."\r\n"
-//               ."Please change it next time you log in.\r\n";
+    $conn = db_connect();
+    $result = $conn->query("select email from user
+                            where username='".$username."'");
+    if (!$result) {
+      throw new Exception('Could not find email address.');
+    } else if ($result->num_rows == 0) {
+      throw new Exception('Could not find email address.');
+      // username not in db
+    } else {
+      $row = $result->fetch_object();
+      $email = $row->email;
+      $from = "From: support@phpbookmark \r\n";
+      $mesg = "Your PHPBookmark password has been changed to ".$password."\r\n"
+              ."Please change it next time you log in.\r\n";
 
-//       if (mail($email, 'PHPBookmark login information', $mesg, $from)) {
-//         return true;
-//       } else {
-//         throw new Exception('Could not send email.');
-//       }
-//     }
-// }
+      if (mail($email, 'PHPBookmark login information', $mesg, $from)) {
+        return true;
+      } else {
+        throw new Exception('Could not send email.');
+      }
+    }
+}
 
 ?>
